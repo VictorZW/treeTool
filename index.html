@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>treeTool</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="./js/index.js"></script>
+</head>
+<body>
+<!--<div class="addProject-one">创建项目</div>-->
+<!--<div class="addProject-two">创建子项</div>-->
+<!--一级目录组件-->
+<!--<div class="tree-one">-->
+<!--    <div class="left">-->
+<!--        <div class="arrow"></div>-->
+<!--        <div class="tree-one-name">公开公平公正</div>-->
+<!--        <div class="edit-icon"></div>-->
+<!--        <div class="delete-icon"></div>-->
+<!--    </div>-->
+<!--    <div class="right">-->
+<!--        <input type="text" class="num-input"><span>%</span>-->
+<!--    </div>-->
+<!--</div>-->
+<!--二级目录组件-->
+<!--<div class="tree-two">-->
+<!--    <div class="left">-->
+<!--        <div class="tree-two-name">认知能力</div>-->
+<!--        <div class="edit-icon"></div>-->
+<!--        <div class="delete-icon"></div>-->
+<!--    </div>-->
+<!--    <div class="right">-->
+<!--        <input type="text" class="num-input"><span>%</span>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="tree-two">-->
+<!--    <div class="left">-->
+<!--        <div class="tree-two-name">认知能力</div>-->
+<!--        <div class="edit-icon"></div>-->
+<!--        <div class="delete-icon"></div>-->
+<!--    </div>-->
+<!--    <div class="right">-->
+<!--        <input type="text" class="num-input"><span>%</span>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div id="tree"></div>
+</body>
+<script>
+    var tree = new TreeTool(document.querySelector('#tree'), [])
+    tree.init()
+</script>
+</html>

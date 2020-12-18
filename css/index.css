@@ -1,0 +1,104 @@
+/*reset样式*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+ol, ul {
+    list-style: none;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+input{
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+input::-ms-clear{
+    display:none;
+}
+input::-ms-reveal{
+    display:none;
+}
+/*组件样式*/
+.addProject-one {
+    color: #E1452D;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-block;
+}
+.addProject-two {
+    color: #E1452D;
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+/*箭头样式*/
+.arrow {
+    width: 12px;
+    height: 7px;
+    background-image: url("../image/arrow.svg");
+    background-size: 100% 100%;
+}
+.edit-icon {
+    width: 10px;
+    height: 10px;
+    background-image: url("../image/edit-icon.svg");
+    background-size: cover;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.delete-icon {
+    margin-left: 10px;
+    width: 10px;
+    height: 10px;
+    background-image: url("../image/delete-icon.png");
+    background-size: cover;
+    cursor: pointer;
+}
+.tree-one, .tree-two {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.tree-two {
+    margin-bottom: 14px;
+}
+.left {
+    display: flex;
+    align-items: center;
+}
+.left .tree-one-name {
+    margin-left: 11px;
+    color: #000000;
+    font-size: 14px;
+}
+.left .tree-two-name {
+    font-size: 12px;
+    color: #000000;
+    line-height: 14px;
+}
+.right .num-input {
+    width: 50px;
+    height: 20px;
+    background-color: #F4F4F4;
+    text-align: center;
+    padding: 0 3px;
+    border-radius: 2px;
+    margin-right: 10px;
+}
+.right .span {
+    font-size: 12px;
+    color: #000000;
+}
+.sub-content {
+    padding-left: 40px;
+}

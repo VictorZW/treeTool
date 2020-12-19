@@ -166,6 +166,21 @@
             }
             console.log(optionsOneArr)
             console.log(optionsTwoArr)
+            var optionsData = {}
+            for (var i = 0; i < optionsOneArr.length; i++) {
+                var subArr = []
+                for (var j = 0; j < optionsTwoArr.length; j++) {
+                    console.log(optionsOneArr[i].id,  optionsTwoArr[j].id)
+                    if (optionsOneArr[i].id === optionsTwoArr[j].id) {
+                        subArr.push({
+                            [optionsTwoArr[j].text]: optionsTwoArr[j].value
+                        })
+                    }
+                }
+                optionsData[optionsOneArr[i].text] = (subArr instanceof Array && subArr.length > 0) ? subArr : optionsOneArr[i].value
+            }
+            console.log(JSON.parse(JSON.stringify(optionsData)))
+            return JSON.parse(JSON.stringify(optionsData))
         }
     }
     var TreeTool = function (el, options) {

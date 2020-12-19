@@ -12,6 +12,7 @@
 <body>
 <div id="tree"></div>
 <div onclick="getData()">获取值</div>
+<div onclick="getAllPercent()">获取当前百分比</div>
 </body>
 <script>
     var options = {
@@ -36,11 +37,17 @@
         ],
         '周三': 30
     }
-    var tree = new TreeTool(document.querySelector('#tree'), options)
+    var tree = new TreeTool(document.querySelector('#tree'), [])
     tree.init()
+    // 获取options数据
     function getData () {
         var data = tree.getOptions()
         console.log(data)
+    }
+    // 获取总共的百分比
+    function getAllPercent () {
+        var percent = tree.getAllPercent()
+        console.log(percent)
     }
 </script>
 </html>

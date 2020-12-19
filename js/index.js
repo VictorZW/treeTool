@@ -243,6 +243,22 @@
                 }
             }
             return JSON.parse(JSON.stringify(optionsData))
+        },
+        getAllPercent: function () {
+            var sum = 0
+            var numArr = []
+            var allNumInput = document.getElementsByClassName('num-input')
+            var allSumNumInput = document.getElementsByClassName('sub-num-input')
+            for (var i = 0; i < allNumInput.length; i++) {
+                numArr.push(allNumInput[i].value)
+            }
+            for (var j = 0; j < allSumNumInput.length; j++) {
+                numArr.push(allSumNumInput[j].value)
+            }
+            for (var a in numArr) {
+                sum += Number(numArr[a])
+            }
+            return sum
         }
     }
     var TreeTool = function (el, options) {
@@ -256,6 +272,9 @@
         },
         getOptions: function () {
             return treeUtils.handleOptions()
+        },
+        getAllPercent: function () {
+            return treeUtils.getAllPercent()
         }
     }
     window.TreeTool = TreeTool

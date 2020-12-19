@@ -85,6 +85,34 @@
                         console.log('点击了取消')
                     }
                 }
+                if (target.className === 'sub-edit-icon') {
+                    var name = prompt('请输入要修改的子项名称','')
+                    if (name !== null) {
+                        console.log(name)
+                        var treeTwoNameArr = document.getElementsByClassName('tree-two-name')
+                        for (var i = 0; i < treeTwoNameArr.length; i++) {
+                            // treeTwoArr
+                            if (treeTwoNameArr[i].dataset.key === target.dataset.key) {
+                                treeTwoNameArr[i].innerHTML = name
+                            }
+                        }
+                        treeUtils.handleOptions()
+                    }
+                }
+                if (target.className === 'edit-icon') {
+                    var name = prompt('请输入要修改的主项名称','')
+                    if (name !== null) {
+                        console.log(name)
+                        var treeOneNameArr = document.getElementsByClassName('tree-one-name')
+                        for (var i = 0; i < treeOneNameArr.length; i++) {
+                            // treeTwoArr
+                            if (treeOneNameArr[i].dataset.id === target.dataset.id) {
+                                treeOneNameArr[i].innerHTML = name
+                            }
+                        }
+                        treeUtils.handleOptions()
+                    }
+                }
             })
             document.addEventListener('change', function (event) {
                 // console.log(event.target)
@@ -130,7 +158,7 @@
                 var treeTwo = '<div class="tree-two" data-id="'+ subId + '" data-key="'+ timestamp + '">' +
                     '<div class="left">' +
                     '<div class="tree-two-name" data-id="'+ subId + '" data-key="'+ timestamp + '">' + subName + '</div>' +
-                    '<div class="edit-icon" data-id="'+ subId + '" data-key="'+ timestamp + '"></div>' +
+                    '<div class="sub-edit-icon" data-id="'+ subId + '" data-key="'+ timestamp + '"></div>' +
                     '<div class="sub-delete-icon" data-id="'+ subId + '" data-key="'+ timestamp + '"></div>' +
                     '</div>' +
                     '<div class="right">' +
@@ -196,7 +224,6 @@
                     }
                 }
                 optionsData[optionsOneArr[i].text] = (subArr instanceof Array && subArr.length > 0) ? subArr : optionsOneArr[i].value
-                console.log(subArr)
                 if (subArr.length > 0) {
                     // 说明有二级树，需要删除一级树上的input
                     var numInputDomArr = document.getElementsByClassName('num-input')
@@ -209,9 +236,7 @@
             }
             console.log(JSON.parse(JSON.stringify(optionsData)))
             return JSON.parse(JSON.stringify(optionsData))
-        },
-        // 重绘页面
-        repaintDom: function () {}
+        }
     }
     var TreeTool = function (el, options) {
         this.el = el

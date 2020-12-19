@@ -47,7 +47,7 @@ input::-ms-reveal{
     background-image: url("../image/arrow.svg");
     background-size: 100% 100%;
 }
-.edit-icon {
+.edit-icon, .sub-edit-icon {
     width: 10px;
     height: 10px;
     background-image: url("../image/edit-icon.svg");

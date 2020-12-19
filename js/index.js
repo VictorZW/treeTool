@@ -30,19 +30,19 @@
             if (utils.checkOptions(options)) {
                 for (var i in options) {
                     // 将一级树渲染到dom
-                    var treeOne = treeUtils.initTreeOne(i)
+                    console.log(isNaN(options[i]))
+                    // if options[i] is number, don`t insert value
+                    var treeOne = treeUtils.initTreeOne(i, isNaN(options[i]) ? '' : options[i])
                     treeOne && addProjectOne.insertAdjacentHTML('beforebegin', treeOne)
                     var treeOneId = treeOne.match(/\d+/)[0]
                     var treeTwoAddDom = document.getElementById(treeOneId)
-                    console.log(treeTwoAddDom)
                     // 如果options[i]是数组，说明有子项
                     if (options[i] instanceof Array) {
                         for (var j in options[i]) {
                             // console.log(options[i][j])
                             for (var k in options[i][j]) {
                                 // console.log(k)
-                                var treeTwo = treeUtils.initTreeTwo(treeOneId, k)
-                                console.log(treeTwo)
+                                var treeTwo = treeUtils.initTreeTwo(treeOneId, k, options[i][j][k])
                                 treeTwo && treeTwoAddDom.insertAdjacentHTML('beforebegin', treeTwo)
                             }
                         }
@@ -69,10 +69,18 @@
                     treeTwo && target.insertAdjacentHTML('beforebegin', treeTwo)
                 }
             })
+            document.addEventListener('change', function (event) {
+                console.log(event.target)
+                var target = event.target
+                console.log(target.className)
+                // 调用处理数据方法
+                treeUtils.handleOptions()
+            })
         },
         // 添加一级树型图
-        initTreeOne: function (name) {
+        initTreeOne: function (name, value) {
             name = name || prompt('请输入要创建的名字','')
+            value = value || ''
             if (name !== null) {
                 // 生成100000-999999的随机数
                 var timestamp = utils.getRandomNum(10000,999999)
@@ -84,7 +92,7 @@
                             '<div class="delete-icon" data-id="'+ timestamp + '"></div>' +
                         '</div>' +
                         '<div class="right">' +
-                            '<input type="text" class="num-input" data-id="'+ timestamp + '"><span>%</span>' +
+                            '<input type="text" class="num-input" data-id="'+ timestamp + '" value="'+ value + '"><span>%</span>' +
                         '</div>' +
                     '</div>' +
                     '<div class="sub-content"><div id="'+ timestamp + '" data-id="'+ timestamp + '" class="addProject-two">创建子项</div></div>'
@@ -94,10 +102,12 @@
             }
         },
         // 添加二级树型图
-        initTreeTwo: function (id, subName) {
+        initTreeTwo: function (id, subName, value) {
             // console.log(id)
-            var subId = 'sub' + String(id)
+            var subId = id
+            var timestamp = utils.getRandomNum(10000,999999)
             subName = subName || prompt('请输入要创建的子项名字','')
+            value = value || ''
             if (subName !== null) {
                 var treeTwo = '<div class="tree-two" data-id="'+ subId + '">' +
                     '<div class="left">' +
@@ -106,13 +116,38 @@
                     '<div class="delete-icon" data-id="'+ subId + '"></div>' +
                     '</div>' +
                     '<div class="right">' +
-                    '<input type="text" class="num-input" data-id="'+ subId + '"><span>%</span>' +
+                    '<input type="text" class="sub-num-input" data-id="'+ subId + '" data-key="'+ timestamp + '" value="'+ value + '"><span>%</span>' +
                     '</div>' +
                     '</div>'
                 return treeTwo
             } else {
                 return false
             }
+        },
+        handleOptions: function () {
+            var optionsOneArr = []
+            var allDom = document.getElementsByTagName('*')
+            for (var a in allDom) {
+                // 如果data-id有值
+                if (allDom[a].dataset && allDom[a].dataset.id) {
+                    // 先处理一级目录的数据
+                    if (allDom[a].className === 'tree-one-name') {
+                        var thisId = allDom[a].dataset.id
+                        var allNumInput = document.getElementsByClassName('num-input')
+                        for (var i = 0; i < allNumInput.length; i++) {
+                            if (allNumInput[i].dataset.id === thisId) {
+                                optionsOneArr.push({
+                                    id: allDom[a].dataset.id,
+                                    className: allDom[a].className,
+                                    text: allDom[a].innerHTML,
+                                    value: allNumInput[i].value
+                                })
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(optionsOneArr)
         }
     }
     var TreeTool = function (el, options) {

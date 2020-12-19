@@ -13,7 +13,7 @@
 <div id="tree"></div>
 <div onclick="getData()">获取值</div>
 <div onclick="getAllPercent()">获取当前百分比</div>
-<div onclick="checkAllInput()">检查每个input是否都不为空</div>
+<div onclick="checkAllInput()">检查每个input是否都不为空，true 说明有空值，false说明都不为空</div>
 </body>
 <script>
     var options = {
@@ -22,18 +22,18 @@
                 '早晨': 10
             },
             {
-                '中午': 9
+                '中午': 5
             },
             {
-                '晚上': 30
+                '晚上': 15
             }
         ],
         '周二': [
             {
-                '早晨': 13
+                '早晨': 20
             },
             {
-                '晚上': 19
+                '晚上': 10
             }
         ],
         '周三': 30

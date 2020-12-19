@@ -267,7 +267,6 @@
             for (var a in numArr) {
                 sum += Number(numArr[a])
             }
-            console.log(numArr)
             return sum
         },
         // 检查每个input是否有值，不为''

@@ -55,7 +55,7 @@ input::-ms-reveal{
     margin-left: 10px;
     cursor: pointer;
 }
-.delete-icon {
+.delete-icon , .sub-delete-icon{
     margin-left: 10px;
     width: 10px;
     height: 10px;

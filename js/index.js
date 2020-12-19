@@ -55,6 +55,7 @@
                 // console.log(treeOne)
                 // console.log(addProjectOne)
                 treeOne && addProjectOne.insertAdjacentHTML('beforebegin', treeOne)
+                treeUtils.handleOptions()
             })
 
             // 点击事件：事件委托
@@ -66,15 +67,33 @@
                     // 点击的是创建子项
                     var treeTwo = treeUtils.initTreeTwo(target.dataset.id)
                     treeTwo && target.insertAdjacentHTML('beforebegin', treeTwo)
+                    treeUtils.handleOptions()
+                }
+                if (target.className === 'sub-delete-icon') {
+                    if (confirm('确定删除吗？')) {
+                        console.log('点击了确定')
+                        console.log(target.dataset.key)
+                        var treeTwoArr = document.getElementsByClassName('tree-two')
+                        for (var i = 0; i < treeTwoArr.length; i++) {
+                            // treeTwoArr
+                            if (treeTwoArr[i].dataset.key === target.dataset.key) {
+                                treeTwoArr[i].remove()
+                            }
+                        }
+                        treeUtils.handleOptions()
+                    } else {
+                        console.log('点击了取消')
+                    }
                 }
             })
             document.addEventListener('change', function (event) {
-                console.log(event.target)
+                // console.log(event.target)
                 var target = event.target
-                console.log(target.className)
+                // console.log(target.className)
                 // 调用处理数据方法
                 treeUtils.handleOptions()
             })
+            treeUtils.handleOptions()
         },
         // 添加一级树型图
         initTreeOne: function (name, value) {
@@ -94,7 +113,7 @@
                             '<input type="text" class="num-input" data-id="'+ timestamp + '" value="'+ value + '"><span>%</span>' +
                         '</div>' +
                     '</div>' +
-                    '<div class="sub-content"><div id="'+ timestamp + '" data-id="'+ timestamp + '" class="addProject-two">创建子项</div></div>'
+                    '<div class="sub-content" data-id="'+ timestamp + '"><div id="'+ timestamp + '" data-id="'+ timestamp + '" class="addProject-two">创建子项</div></div>'
                 return treeOne
             } else {
                 return false
@@ -108,11 +127,11 @@
             subName = subName || prompt('请输入要创建的子项名字','')
             value = value || ''
             if (subName !== null) {
-                var treeTwo = '<div class="tree-two" data-id="'+ subId + '">' +
+                var treeTwo = '<div class="tree-two" data-id="'+ subId + '" data-key="'+ timestamp + '">' +
                     '<div class="left">' +
                     '<div class="tree-two-name" data-id="'+ subId + '" data-key="'+ timestamp + '">' + subName + '</div>' +
-                    '<div class="edit-icon" data-id="'+ subId + '"></div>' +
-                    '<div class="delete-icon" data-id="'+ subId + '"></div>' +
+                    '<div class="edit-icon" data-id="'+ subId + '" data-key="'+ timestamp + '"></div>' +
+                    '<div class="sub-delete-icon" data-id="'+ subId + '" data-key="'+ timestamp + '"></div>' +
                     '</div>' +
                     '<div class="right">' +
                     '<input type="text" class="sub-num-input" data-id="'+ subId + '" data-key="'+ timestamp + '" value="'+ value + '"><span>%</span>' +
@@ -164,13 +183,12 @@
                     }
                 }
             }
-            console.log(optionsOneArr)
-            console.log(optionsTwoArr)
+            // console.log(optionsOneArr)
+            // console.log(optionsTwoArr)
             var optionsData = {}
             for (var i = 0; i < optionsOneArr.length; i++) {
                 var subArr = []
                 for (var j = 0; j < optionsTwoArr.length; j++) {
-                    console.log(optionsOneArr[i].id,  optionsTwoArr[j].id)
                     if (optionsOneArr[i].id === optionsTwoArr[j].id) {
                         subArr.push({
                             [optionsTwoArr[j].text]: optionsTwoArr[j].value
@@ -178,10 +196,22 @@
                     }
                 }
                 optionsData[optionsOneArr[i].text] = (subArr instanceof Array && subArr.length > 0) ? subArr : optionsOneArr[i].value
+                console.log(subArr)
+                if (subArr.length > 0) {
+                    // 说明有二级树，需要删除一级树上的input
+                    var numInputDomArr = document.getElementsByClassName('num-input')
+                    for (var k = 0; k < numInputDomArr.length; k++) {
+                        if (numInputDomArr[k] && (numInputDomArr[k].dataset.id === optionsOneArr[i].id)) {
+                            numInputDomArr[k].parentNode.innerHTML = ''
+                        }
+                    }
+                }
             }
             console.log(JSON.parse(JSON.stringify(optionsData)))
             return JSON.parse(JSON.stringify(optionsData))
-        }
+        },
+        // 重绘页面
+        repaintDom: function () {}
     }
     var TreeTool = function (el, options) {
         this.el = el

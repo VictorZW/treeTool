@@ -1,6 +1,6 @@
 # treeTool 树型图组件
 
-<img src="https://raw.githubusercontent.com/VictorZW/treeTool/main/demoImg/demo.png" width = "300" alt="demo.png" align=center />
+<img src="https://raw.githubusercontent.com/VictorZW/treeTool/main/demoImg/demoIMg.png" width = "300" alt="demo.png" align=center />
 
 # 使用方法
 

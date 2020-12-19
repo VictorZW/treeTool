@@ -148,7 +148,7 @@
                             '<div class="delete-icon" data-id="'+ timestamp + '"></div>' +
                         '</div>' +
                         '<div class="right">' +
-                            '<input type="text" class="num-input" data-id="'+ timestamp + '" value="'+ value + '"><span>%</span>' +
+                            '<input type="number" class="num-input" data-id="'+ timestamp + '" value="'+ value + '"><span>%</span>' +
                         '</div>' +
                     '</div>' +
                     '<div class="sub-content" data-id="'+ timestamp + '"><div id="'+ timestamp + '" data-id="'+ timestamp + '" class="addProject-two">创建子项</div></div>'
@@ -171,7 +171,7 @@
                     '<div class="sub-delete-icon" data-id="'+ subId + '" data-key="'+ timestamp + '"></div>' +
                     '</div>' +
                     '<div class="right">' +
-                    '<input type="text" class="sub-num-input" data-id="'+ subId + '" data-key="'+ timestamp + '" value="'+ value + '"><span>%</span>' +
+                    '<input type="number" class="sub-num-input" data-id="'+ subId + '" data-key="'+ timestamp + '" value="'+ value + '"><span>%</span>' +
                     '</div>' +
                     '</div>'
                 return treeTwo
@@ -231,13 +231,15 @@
                     }
                 }
                 optionsData[optionsOneArr[i].text] = (subArr instanceof Array && subArr.length > 0) ? subArr : optionsOneArr[i].value
-                if (subArr.length > 0) {
-                    // 说明有二级树，需要删除一级树上的input
-                    var numInputDomArr = document.getElementsByClassName('num-input')
-                    for (var k = 0; k < numInputDomArr.length; k++) {
-                        if (numInputDomArr[k] && (numInputDomArr[k].dataset.id === optionsOneArr[i].id)) {
+                var numInputDomArr = document.getElementsByClassName('num-input')
+                for (var k = 0; k < numInputDomArr.length; k++) {
+                    if (numInputDomArr[k] && (numInputDomArr[k].dataset.id === optionsOneArr[i].id)) {
+                        if (subArr.length > 0) {
+                            // 说明有二级树，需要删除一级树上的input
                             numInputDomArr[k].value = ''
                             numInputDomArr[k].parentNode.style.display = 'none'
+                        } else {
+                            numInputDomArr[k].parentNode.style.display = 'block'
                         }
                     }
                 }

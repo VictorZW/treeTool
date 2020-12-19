@@ -87,7 +87,7 @@ input::-ms-reveal{
     line-height: 14px;
 }
 .right .num-input {
-    width: 50px;
+    width: 80px;
     height: 20px;
     background-color: #F4F4F4;
     text-align: center;
@@ -96,7 +96,7 @@ input::-ms-reveal{
     margin-right: 10px;
 }
 .right .sub-num-input {
-    width: 50px;
+    width: 80px;
     height: 20px;
     background-color: #F4F4F4;
     text-align: center;

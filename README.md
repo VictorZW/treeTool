@@ -1,5 +1,7 @@
 # treeTool 树型图组件
 
+![demo.png](https://raw.githubusercontent.com/VictorZW/treeTool/main/image/demo.png)
+
 # 使用方法
 
 ```

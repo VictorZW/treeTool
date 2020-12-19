@@ -128,6 +128,13 @@
             })
             document.addEventListener('change', function (event) {
                 var target = event.target
+                // var res = /^(\d+\.\d{1,1}|\d+)$/ // 限制只能输入一位小数
+                // if (target.tagName === 'INPUT') {
+                //     console.log(res.test(target.value))
+                //     if (!res.test(target.value)) {
+                //         target.value = ''
+                //     }
+                // }
                 // 调用处理数据方法
                 treeUtils.handleOptions()
             })
@@ -236,7 +243,7 @@
                     if (numInputDomArr[k] && (numInputDomArr[k].dataset.id === optionsOneArr[i].id)) {
                         if (subArr.length > 0) {
                             // 说明有二级树，需要删除一级树上的input
-                            numInputDomArr[k].value = ''
+                            numInputDomArr[k].value = 0
                             numInputDomArr[k].parentNode.style.display = 'none'
                         } else {
                             numInputDomArr[k].parentNode.style.display = 'block'
@@ -260,7 +267,21 @@
             for (var a in numArr) {
                 sum += Number(numArr[a])
             }
+            console.log(numArr)
             return sum
+        },
+        // 检查每个input是否有值，不为''
+        checkAllInput: function () {
+            var numArr = []
+            var allNumInput = document.getElementsByClassName('num-input')
+            var allSumNumInput = document.getElementsByClassName('sub-num-input')
+            for (var i = 0; i < allNumInput.length; i++) {
+                numArr.push(allNumInput[i].value)
+            }
+            for (var j = 0; j < allSumNumInput.length; j++) {
+                numArr.push(allSumNumInput[j].value)
+            }
+            return numArr.indexOf('') > 0 // 如果大于0 说明有空值
         }
     }
     var TreeTool = function (el, options) {
@@ -277,6 +298,9 @@
         },
         getAllPercent: function () {
             return treeUtils.getAllPercent()
+        },
+        checkAllInput: function () {
+            return treeUtils.checkAllInput()
         }
     }
     window.TreeTool = TreeTool

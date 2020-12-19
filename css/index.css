@@ -94,6 +94,7 @@ input::-ms-reveal{
     padding: 0 3px;
     border-radius: 2px;
     margin-right: 10px;
+    font-size: 12px;
 }
 .right .sub-num-input {
     width: 80px;
@@ -103,8 +104,9 @@ input::-ms-reveal{
     padding: 0 3px;
     border-radius: 2px;
     margin-right: 10px;
+    font-size: 12px;
 }
-.right .span {
+.right span {
     font-size: 12px;
     color: #000000;
 }

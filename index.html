@@ -13,6 +13,7 @@
 <div id="tree"></div>
 <div onclick="getData()">获取值</div>
 <div onclick="getAllPercent()">获取当前百分比</div>
+<div onclick="checkAllInput()">检查每个input是否都不为空</div>
 </body>
 <script>
     var options = {
@@ -37,7 +38,7 @@
         ],
         '周三': 30
     }
-    var tree = new TreeTool(document.querySelector('#tree'), [])
+    var tree = new TreeTool(document.querySelector('#tree'), options)
     tree.init()
     // 获取options数据
     function getData () {
@@ -48,6 +49,11 @@
     function getAllPercent () {
         var percent = tree.getAllPercent()
         console.log(percent)
+    }
+    function checkAllInput () {
+        var bool = tree.checkAllInput()
+        console.log(bool)
+        // bool = true 说明有空值，否则说明都不为空
     }
 </script>
 </html>

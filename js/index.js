@@ -30,7 +30,6 @@
             if (utils.checkOptions(options)) {
                 for (var i in options) {
                     // 将一级树渲染到dom
-                    console.log(isNaN(options[i]))
                     // if options[i] is number, don`t insert value
                     var treeOne = treeUtils.initTreeOne(i, isNaN(options[i]) ? '' : options[i])
                     treeOne && addProjectOne.insertAdjacentHTML('beforebegin', treeOne)
@@ -111,7 +110,7 @@
             if (subName !== null) {
                 var treeTwo = '<div class="tree-two" data-id="'+ subId + '">' +
                     '<div class="left">' +
-                    '<div class="tree-two-name" data-id="'+ subId + '">' + subName + '</div>' +
+                    '<div class="tree-two-name" data-id="'+ subId + '" data-key="'+ timestamp + '">' + subName + '</div>' +
                     '<div class="edit-icon" data-id="'+ subId + '"></div>' +
                     '<div class="delete-icon" data-id="'+ subId + '"></div>' +
                     '</div>' +
@@ -126,6 +125,7 @@
         },
         handleOptions: function () {
             var optionsOneArr = []
+            var optionsTwoArr = []
             var allDom = document.getElementsByTagName('*')
             for (var a in allDom) {
                 // 如果data-id有值
@@ -145,9 +145,27 @@
                             }
                         }
                     }
+                    // 在处理二级树的数据
+                    if (allDom[a].className === 'tree-two-name') {
+                        var thisSubId = allDom[a].dataset.id
+                        var subKey = allDom[a].dataset.key
+                        var allSubNumInput = document.getElementsByClassName('sub-num-input')
+                        for (var i = 0; i < allSubNumInput.length; i++) {
+                            if (allSubNumInput[i].dataset.key === subKey) {
+                                optionsTwoArr.push({
+                                    id: thisSubId,
+                                    className: allDom[a].className,
+                                    text: allDom[a].innerHTML,
+                                    value: allSubNumInput[i].value,
+                                    key: allSubNumInput[i].dataset.key
+                                })
+                            }
+                        }
+                    }
                 }
             }
             console.log(optionsOneArr)
+            console.log(optionsTwoArr)
         }
     }
     var TreeTool = function (el, options) {

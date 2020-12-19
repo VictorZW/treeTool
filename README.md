@@ -4,7 +4,12 @@
 
 # 使用方法
 
+
 ```
+// 引入css、js文件
+<link rel="stylesheet" href="./css/index.css">
+<script src="./js/index.js"></script>
+
 var tree = new TreeTool(document.querySelector('#tree'), options)
 tree.init()
 ```

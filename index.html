@@ -11,6 +11,7 @@
 </head>
 <body>
 <div id="tree"></div>
+<div onclick="getData()">获取值</div>
 </body>
 <script>
     var options = {
@@ -37,5 +38,9 @@
     }
     var tree = new TreeTool(document.querySelector('#tree'), options)
     tree.init()
+    function getData () {
+        var data = tree.getOptions()
+        console.log(data)
+    }
 </script>
 </html>

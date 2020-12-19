@@ -21,7 +21,7 @@
     }
     var treeUtils = {
         initTree: function (el, options) {
-            console.log(options)
+            // console.log(options)
             // 往el dom中插入 创建项目 元素 只能插入一次
             var addProjectOne = utils.creatDom('<div class="addProject-one">创建项目</div>')
             el.appendChild(addProjectOne)
@@ -38,9 +38,7 @@
                     // 如果options[i]是数组，说明有子项
                     if (options[i] instanceof Array) {
                         for (var j in options[i]) {
-                            // console.log(options[i][j])
                             for (var k in options[i][j]) {
-                                // console.log(k)
                                 var treeTwo = treeUtils.initTreeTwo(treeOneId, k, options[i][j][k])
                                 treeTwo && treeTwoAddDom.insertAdjacentHTML('beforebegin', treeTwo)
                             }
@@ -52,8 +50,6 @@
             // 点击事件：点击创建项目按钮 创建一级树
             addProjectOne.addEventListener('click', function () {
                 var treeOne = treeUtils.initTreeOne()
-                // console.log(treeOne)
-                // console.log(addProjectOne)
                 treeOne && addProjectOne.insertAdjacentHTML('beforebegin', treeOne)
                 treeUtils.handleOptions()
             })
@@ -61,7 +57,6 @@
             // 点击事件：事件委托
             document.addEventListener('click', function (event) {
                 var target = event.target
-                // console.log(target, target.className, target.dataset.id)
                 // 点击创建子项按钮
                 if (target.className === 'addProject-two') {
                     // 点击的是创建子项
@@ -70,9 +65,7 @@
                     treeUtils.handleOptions()
                 }
                 if (target.className === 'sub-delete-icon') {
-                    if (confirm('确定删除吗？')) {
-                        console.log('点击了确定')
-                        console.log(target.dataset.key)
+                    if (confirm('确定删除子项吗？')) {
                         var treeTwoArr = document.getElementsByClassName('tree-two')
                         for (var i = 0; i < treeTwoArr.length; i++) {
                             // treeTwoArr
@@ -85,10 +78,30 @@
                         console.log('点击了取消')
                     }
                 }
+                if (target.className === 'delete-icon') {
+                    if (confirm('确定删除吗？')) {
+                        var treeOneArr = document.getElementsByClassName('tree-one')
+                        var subContentArr = document.getElementsByClassName('sub-content')
+                        for (var i = 0; i < treeOneArr.length; i++) {
+                            // treeTwoArr
+                            if (treeOneArr[i].dataset.id === target.dataset.id) {
+                                treeOneArr[i].remove()
+                            }
+                        }
+                        for (var j = 0; j < subContentArr.length; j++) {
+                            // treeTwoArr
+                            if (subContentArr[j].dataset.id === target.dataset.id) {
+                                subContentArr[j].remove()
+                            }
+                        }
+                        treeUtils.handleOptions()
+                    } else {
+                        console.log('点击了取消')
+                    }
+                }
                 if (target.className === 'sub-edit-icon') {
                     var name = prompt('请输入要修改的子项名称','')
                     if (name !== null) {
-                        console.log(name)
                         var treeTwoNameArr = document.getElementsByClassName('tree-two-name')
                         for (var i = 0; i < treeTwoNameArr.length; i++) {
                             // treeTwoArr
@@ -102,7 +115,6 @@
                 if (target.className === 'edit-icon') {
                     var name = prompt('请输入要修改的主项名称','')
                     if (name !== null) {
-                        console.log(name)
                         var treeOneNameArr = document.getElementsByClassName('tree-one-name')
                         for (var i = 0; i < treeOneNameArr.length; i++) {
                             // treeTwoArr
@@ -115,9 +127,7 @@
                 }
             })
             document.addEventListener('change', function (event) {
-                // console.log(event.target)
                 var target = event.target
-                // console.log(target.className)
                 // 调用处理数据方法
                 treeUtils.handleOptions()
             })
@@ -149,7 +159,6 @@
         },
         // 添加二级树型图
         initTreeTwo: function (id, subName, value) {
-            // console.log(id)
             var subId = id
             var timestamp = utils.getRandomNum(10000,999999)
             subName = subName || prompt('请输入要创建的子项名字','')
@@ -211,8 +220,6 @@
                     }
                 }
             }
-            // console.log(optionsOneArr)
-            // console.log(optionsTwoArr)
             var optionsData = {}
             for (var i = 0; i < optionsOneArr.length; i++) {
                 var subArr = []
@@ -229,12 +236,12 @@
                     var numInputDomArr = document.getElementsByClassName('num-input')
                     for (var k = 0; k < numInputDomArr.length; k++) {
                         if (numInputDomArr[k] && (numInputDomArr[k].dataset.id === optionsOneArr[i].id)) {
-                            numInputDomArr[k].parentNode.innerHTML = ''
+                            numInputDomArr[k].value = ''
+                            numInputDomArr[k].parentNode.style.display = 'none'
                         }
                     }
                 }
             }
-            console.log(JSON.parse(JSON.stringify(optionsData)))
             return JSON.parse(JSON.stringify(optionsData))
         }
     }
@@ -246,6 +253,9 @@
         constructor: TreeTool,
         init: function () {
             treeUtils.initTree(this.el, this.options)
+        },
+        getOptions: function () {
+            return treeUtils.handleOptions()
         }
     }
     window.TreeTool = TreeTool

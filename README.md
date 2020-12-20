@@ -6,7 +6,7 @@
 
 
 ```
-// 引入css、js文件
+// 引入css、js、image文件
 <link rel="stylesheet" href="./css/index.css">
 <script src="./js/index.js"></script>
 

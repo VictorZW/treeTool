@@ -56,6 +56,10 @@
 
             // 点击事件：事件委托
             document.addEventListener('click', function (event) {
+                var eventPath = event.path
+                if (eventPath.indexOf(el) < 0) {
+                    return false
+                }
                 var target = event.target
                 // 点击创建子项按钮
                 if (target.className === 'addProject-two') {
@@ -125,7 +129,7 @@
                         treeUtils.handleOptions(el)
                     }
                 }
-            })
+            }, true)
             document.addEventListener('change', function (event) {
                 var target = event.target
                 // var res = /^(\d+\.\d{1,1}|\d+)$/ // 限制只能输入一位小数

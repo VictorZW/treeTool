@@ -51,7 +51,7 @@
             addProjectOne.addEventListener('click', function () {
                 var treeOne = treeUtils.initTreeOne()
                 treeOne && addProjectOne.insertAdjacentHTML('beforebegin', treeOne)
-                treeUtils.handleOptions()
+                treeUtils.handleOptions(el)
             })
 
             // 点击事件：事件委托
@@ -62,26 +62,26 @@
                     // 点击的是创建子项
                     var treeTwo = treeUtils.initTreeTwo(target.dataset.id)
                     treeTwo && target.insertAdjacentHTML('beforebegin', treeTwo)
-                    treeUtils.handleOptions()
+                    treeUtils.handleOptions(el)
                 }
                 if (target.className === 'sub-delete-icon') {
                     if (confirm('确定删除子项吗？')) {
-                        var treeTwoArr = document.getElementsByClassName('tree-two')
+                        var treeTwoArr = el.getElementsByClassName('tree-two')
                         for (var i = 0; i < treeTwoArr.length; i++) {
                             // treeTwoArr
                             if (treeTwoArr[i].dataset.key === target.dataset.key) {
                                 treeTwoArr[i].remove()
                             }
                         }
-                        treeUtils.handleOptions()
+                        treeUtils.handleOptions(el)
                     } else {
                         console.log('点击了取消')
                     }
                 }
                 if (target.className === 'delete-icon') {
                     if (confirm('确定删除吗？')) {
-                        var treeOneArr = document.getElementsByClassName('tree-one')
-                        var subContentArr = document.getElementsByClassName('sub-content')
+                        var treeOneArr = el.getElementsByClassName('tree-one')
+                        var subContentArr = el.getElementsByClassName('sub-content')
                         for (var i = 0; i < treeOneArr.length; i++) {
                             // treeTwoArr
                             if (treeOneArr[i].dataset.id === target.dataset.id) {
@@ -94,7 +94,7 @@
                                 subContentArr[j].remove()
                             }
                         }
-                        treeUtils.handleOptions()
+                        treeUtils.handleOptions(el)
                     } else {
                         console.log('点击了取消')
                     }
@@ -102,27 +102,27 @@
                 if (target.className === 'sub-edit-icon') {
                     var name = prompt('请输入要修改的子项名称','')
                     if (name !== null) {
-                        var treeTwoNameArr = document.getElementsByClassName('tree-two-name')
+                        var treeTwoNameArr = el.getElementsByClassName('tree-two-name')
                         for (var i = 0; i < treeTwoNameArr.length; i++) {
                             // treeTwoArr
                             if (treeTwoNameArr[i].dataset.key === target.dataset.key) {
                                 treeTwoNameArr[i].innerHTML = name
                             }
                         }
-                        treeUtils.handleOptions()
+                        treeUtils.handleOptions(el)
                     }
                 }
                 if (target.className === 'edit-icon') {
                     var name = prompt('请输入要修改的主项名称','')
                     if (name !== null) {
-                        var treeOneNameArr = document.getElementsByClassName('tree-one-name')
+                        var treeOneNameArr = el.getElementsByClassName('tree-one-name')
                         for (var i = 0; i < treeOneNameArr.length; i++) {
                             // treeTwoArr
                             if (treeOneNameArr[i].dataset.id === target.dataset.id) {
                                 treeOneNameArr[i].innerHTML = name
                             }
                         }
-                        treeUtils.handleOptions()
+                        treeUtils.handleOptions(el)
                     }
                 }
             })
@@ -136,9 +136,9 @@
                 //     }
                 // }
                 // 调用处理数据方法
-                treeUtils.handleOptions()
+                treeUtils.handleOptions(el)
             })
-            treeUtils.handleOptions()
+            treeUtils.handleOptions(el)
         },
         // 添加一级树型图
         initTreeOne: function (name, value) {
@@ -186,17 +186,17 @@
                 return false
             }
         },
-        handleOptions: function () {
+        handleOptions: function (el) {
             var optionsOneArr = []
             var optionsTwoArr = []
-            var allDom = document.getElementsByTagName('*')
+            var allDom = el.getElementsByTagName('*')
             for (var a in allDom) {
                 // 如果data-id有值
                 if (allDom[a].dataset && allDom[a].dataset.id) {
                     // 先处理一级目录的数据
                     if (allDom[a].className === 'tree-one-name') {
                         var thisId = allDom[a].dataset.id
-                        var allNumInput = document.getElementsByClassName('num-input')
+                        var allNumInput = el.getElementsByClassName('num-input')
                         for (var i = 0; i < allNumInput.length; i++) {
                             if (allNumInput[i].dataset.id === thisId) {
                                 optionsOneArr.push({
@@ -212,7 +212,7 @@
                     if (allDom[a].className === 'tree-two-name') {
                         var thisSubId = allDom[a].dataset.id
                         var subKey = allDom[a].dataset.key
-                        var allSubNumInput = document.getElementsByClassName('sub-num-input')
+                        var allSubNumInput = el.getElementsByClassName('sub-num-input')
                         for (var i = 0; i < allSubNumInput.length; i++) {
                             if (allSubNumInput[i].dataset.key === subKey) {
                                 optionsTwoArr.push({
@@ -238,7 +238,7 @@
                     }
                 }
                 optionsData[optionsOneArr[i].text] = (subArr instanceof Array && subArr.length > 0) ? subArr : optionsOneArr[i].value
-                var numInputDomArr = document.getElementsByClassName('num-input')
+                var numInputDomArr = el.getElementsByClassName('num-input')
                 for (var k = 0; k < numInputDomArr.length; k++) {
                     if (numInputDomArr[k] && (numInputDomArr[k].dataset.id === optionsOneArr[i].id)) {
                         if (subArr.length > 0) {
@@ -254,11 +254,11 @@
             window.getAllPercentFoo()
             return JSON.parse(JSON.stringify(optionsData))
         },
-        getAllPercent: function () {
+        getAllPercent: function (el) {
             var sum = 0
             var numArr = []
-            var allNumInput = document.getElementsByClassName('num-input')
-            var allSumNumInput = document.getElementsByClassName('sub-num-input')
+            var allNumInput = el.getElementsByClassName('num-input')
+            var allSumNumInput = el.getElementsByClassName('sub-num-input')
             for (var i = 0; i < allNumInput.length; i++) {
                 numArr.push(allNumInput[i].value)
             }
@@ -271,10 +271,10 @@
             return sum
         },
         // 检查每个input是否有值，不为''
-        checkAllInput: function () {
+        checkAllInput: function (el) {
             var numArr = []
-            var allNumInput = document.getElementsByClassName('num-input')
-            var allSumNumInput = document.getElementsByClassName('sub-num-input')
+            var allNumInput = el.getElementsByClassName('num-input')
+            var allSumNumInput = el.getElementsByClassName('sub-num-input')
             for (var i = 0; i < allNumInput.length; i++) {
                 numArr.push(allNumInput[i].value)
             }
@@ -284,10 +284,10 @@
             return numArr.indexOf('') > 0 // 如果大于0 说明有空值
         },
         // 检查是否有重复的
-        checkHasRepeat: function () {
+        checkHasRepeat: function (el) {
             var valueArr = []
-            var treeOneName = document.getElementsByClassName('tree-one-name')
-            var treeTwoName = document.getElementsByClassName('tree-two-name')
+            var treeOneName = el.getElementsByClassName('tree-one-name')
+            var treeTwoName = el.getElementsByClassName('tree-two-name')
             for (var i = 0; i < treeOneName.length; i++) {
                 valueArr.push(treeOneName[i].innerHTML)
             }
@@ -314,16 +314,16 @@
             treeUtils.initTree(this.el, this.options)
         },
         getOptions: function () {
-            return treeUtils.handleOptions()
+            return treeUtils.handleOptions(this.el)
         },
         getAllPercent: function () {
-            return treeUtils.getAllPercent()
+            return treeUtils.getAllPercent(this.el)
         },
         checkAllInput: function () {
-            return treeUtils.checkAllInput()
+            return treeUtils.checkAllInput(this.el)
         },
         checkHasRepeat: function () {
-            return treeUtils.checkHasRepeat()
+            return treeUtils.checkHasRepeat(this.el)
         }
     }
     window.TreeTool = TreeTool

@@ -11,6 +11,8 @@
 </head>
 <body>
 <div id="tree"></div>
+<div class="line" style="border: 2px solid #000000;"></div>
+<div id="tree2"></div>
 <div onclick="getData()">获取值</div>
 <div onclick="getAllPercentFoo()">获取当前百分比</div>
 <div onclick="checkAllInput()">检查每个input是否都不为空，true 说明有空值，false说明都不为空</div>
@@ -20,7 +22,7 @@
     var options = {
         '周一': [
             {
-                '早晨': 10
+                '早晨': 100
             },
             {
                 '中午': 5
@@ -61,26 +63,32 @@
         ],
         '夜宵': 30
     }
-    var tree = new TreeTool(document.querySelector('#tree'), options2)
+    var tree = new TreeTool(document.querySelector('#tree'), options)
+    var tree2 = new TreeTool(document.querySelector('#tree2'), options2)
     tree.init()
+    tree2.init()
     // 获取options数据
     function getData () {
-        var data = tree.getOptions()
-        console.log(data)
+        var data = tree.getOptions(document.querySelector('#tree'))
+        var data2 = tree2.getOptions(document.querySelector('#tree2'))
+        console.log(data, data2)
     }
     // 获取总共的百分比
     function getAllPercentFoo () {
-        var percent = tree.getAllPercent()
-        console.log(percent)
+        var percent = tree.getAllPercent(document.querySelector('#tree'))
+        var percent2 = tree2.getAllPercent(document.querySelector('#tree2'))
+        console.log(percent, percent2)
     }
     function checkAllInput () {
-        var bool = tree.checkAllInput()
-        console.log(bool)
+        var bool = tree.checkAllInput(document.querySelector('#tree'))
+        var bool2 = tree2.checkAllInput(document.querySelector('#tree2'))
+        console.log(bool, bool2)
         // bool = true 说明有空值，否则说明都不为空
     }
     function checkHasRepeat () {
-        var bool = tree.checkHasRepeat()
-        console.log(bool)
+        var bool = tree.checkHasRepeat(document.querySelector('#tree'))
+        var bool2 = tree2.checkHasRepeat(document.querySelector('#tree2'))
+        console.log(bool, bool2)
     }
     window.getAllPercentFoo = getAllPercentFoo
 </script>

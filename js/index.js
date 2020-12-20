@@ -251,6 +251,7 @@
                     }
                 }
             }
+            window.getAllPercentFoo()
             return JSON.parse(JSON.stringify(optionsData))
         },
         getAllPercent: function () {

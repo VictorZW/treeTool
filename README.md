@@ -49,3 +49,5 @@ var options = {
 
 - tree.checkAllInput() 检查是否有空的输入框，true 说明有空值，false说明都不为空
 
+- tree.checkHasRepeat() 检查是否有重复的元素，true说明有重复的元素
+

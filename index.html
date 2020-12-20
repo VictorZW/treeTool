@@ -14,6 +14,7 @@
 <div onclick="getData()">获取值</div>
 <div onclick="getAllPercent()">获取当前百分比</div>
 <div onclick="checkAllInput()">检查每个input是否都不为空，true 说明有空值，false说明都不为空</div>
+<div onclick="checkHasRepeat()">检查是否有重复的元素，true说明有重复的元素</div>
 </body>
 <script>
     var options = {
@@ -38,7 +39,29 @@
         ],
         '周三': 30
     }
-    var tree = new TreeTool(document.querySelector('#tree'), options)
+    var options2 = {
+        '午饭': [
+            {
+                '煲仔饭': 10
+            },
+            {
+                '叉烧': 5
+            },
+            {
+                '虾饺': 15
+            }
+        ],
+        '晚饭': [
+            {
+                '回锅肉': 20
+            },
+            {
+                '辣子鸡': 10
+            }
+        ],
+        '夜宵': 30
+    }
+    var tree = new TreeTool(document.querySelector('#tree'), options2)
     tree.init()
     // 获取options数据
     function getData () {
@@ -54,6 +77,10 @@
         var bool = tree.checkAllInput()
         console.log(bool)
         // bool = true 说明有空值，否则说明都不为空
+    }
+    function checkHasRepeat () {
+        var bool = tree.checkHasRepeat()
+        console.log(bool)
     }
 </script>
 </html>

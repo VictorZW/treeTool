@@ -281,6 +281,26 @@
                 numArr.push(allSumNumInput[j].value)
             }
             return numArr.indexOf('') > 0 // 如果大于0 说明有空值
+        },
+        // 检查是否有重复的
+        checkHasRepeat: function () {
+            var valueArr = []
+            var treeOneName = document.getElementsByClassName('tree-one-name')
+            var treeTwoName = document.getElementsByClassName('tree-two-name')
+            for (var i = 0; i < treeOneName.length; i++) {
+                valueArr.push(treeOneName[i].innerHTML)
+            }
+            for (var j = 0; j < treeTwoName.length; j++) {
+                valueArr.push(treeTwoName[j].innerHTML)
+            }
+            console.log(valueArr)
+            var nary = valueArr.sort()
+            for(var i = 0; i < nary.length - 1; i++) {
+                if(nary[i] === nary[i + 1]) {
+                    return true
+                }
+            }
+            return false
         }
     }
     var TreeTool = function (el, options) {
@@ -300,6 +320,9 @@
         },
         checkAllInput: function () {
             return treeUtils.checkAllInput()
+        },
+        checkHasRepeat: function () {
+            return treeUtils.checkHasRepeat()
         }
     }
     window.TreeTool = TreeTool

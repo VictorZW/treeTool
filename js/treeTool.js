@@ -1,4 +1,7 @@
 (function (window) {
+    var nowClickDom = ''
+    var clickId = ''
+    var goobleEl = ''
     var utils = {
         creatDom: function (html) {
             var div = document.createElement('div')
@@ -21,7 +24,6 @@
     }
     var treeUtils = {
         initTree: function (el, options) {
-            // console.log(options)
             // 往el dom中插入 创建项目 元素 只能插入一次
             var addProjectOne = utils.creatDom('<div class="addProject-one">创建项目</div>')
             el.appendChild(addProjectOne)
@@ -49,9 +51,11 @@
 
             // 点击事件：点击创建项目按钮 创建一级树
             addProjectOne.addEventListener('click', function () {
-                var treeOne = treeUtils.initTreeOne()
-                treeOne && addProjectOne.insertAdjacentHTML('beforebegin', treeOne)
-                treeUtils.handleOptions(el)
+                var EditDialog = treeUtils.initEditDialog('创建主项', '输入主项名称', '')
+                EditDialog && document.body.insertAdjacentHTML('afterbegin', EditDialog)
+                clickId = ''
+                nowClickDom = addProjectOne
+                goobleEl = el
             })
 
             // 点击事件：事件委托
@@ -64,9 +68,11 @@
                 // 点击创建子项按钮
                 if (target.className === 'addProject-two') {
                     // 点击的是创建子项
-                    var treeTwo = treeUtils.initTreeTwo(target.dataset.id)
-                    treeTwo && target.insertAdjacentHTML('beforebegin', treeTwo)
-                    treeUtils.handleOptions(el)
+                    var EditDialog = treeUtils.initEditDialog('创建子项', '输入子项名称', '')
+                    EditDialog && document.body.insertAdjacentHTML('afterbegin', EditDialog)
+                    nowClickDom = target.className
+                    clickId = target.dataset.id
+                    goobleEl = el
                 }
                 if (target.className === 'sub-delete-icon') {
                     if (confirm('确定删除子项吗？')) {
@@ -83,51 +89,43 @@
                     }
                 }
                 if (target.className === 'delete-icon') {
-                    if (confirm('确定删除吗？')) {
-                        var treeOneArr = el.getElementsByClassName('tree-one')
-                        var subContentArr = el.getElementsByClassName('sub-content')
-                        for (var i = 0; i < treeOneArr.length; i++) {
-                            // treeTwoArr
-                            if (treeOneArr[i].dataset.id === target.dataset.id) {
-                                treeOneArr[i].remove()
-                            }
-                        }
-                        for (var j = 0; j < subContentArr.length; j++) {
-                            // treeTwoArr
-                            if (subContentArr[j].dataset.id === target.dataset.id) {
-                                subContentArr[j].remove()
-                            }
-                        }
-                        treeUtils.handleOptions(el)
-                    } else {
-                        console.log('点击了取消')
-                    }
+                    // initDelDialog
+                    var delDialog = treeUtils.initDelDialog()
+                    delDialog && document.body.insertAdjacentHTML('afterbegin', delDialog)
+                    clickId = target.dataset.id
+                    goobleEl = el
                 }
                 if (target.className === 'sub-edit-icon') {
-                    var name = prompt('请输入要修改的子项名称','')
-                    if (name !== null) {
-                        var treeTwoNameArr = el.getElementsByClassName('tree-two-name')
-                        for (var i = 0; i < treeTwoNameArr.length; i++) {
-                            // treeTwoArr
-                            if (treeTwoNameArr[i].dataset.key === target.dataset.key) {
-                                treeTwoNameArr[i].innerHTML = name
-                            }
+                    // 当前点击元素的所有兄弟元素
+                    var allChildrenDom = target.parentNode.children
+                    var inputValue = ''
+                    for (var i = 0; i < allChildrenDom.length; i++) {
+                        // 找到当前点击的元素的name
+                        if (allChildrenDom[i].className === 'tree-two-name') {
+                            inputValue = allChildrenDom[i].innerHTML
+                            nowClickDom = allChildrenDom[i].className
+                            clickId = allChildrenDom[i].dataset.key
                         }
-                        treeUtils.handleOptions(el)
                     }
+                    var EditDialog = treeUtils.initEditDialog('编辑子项', '输入子项名称', inputValue)
+                    EditDialog && document.body.insertAdjacentHTML('afterbegin', EditDialog)
+                    goobleEl = el
                 }
                 if (target.className === 'edit-icon') {
-                    var name = prompt('请输入要修改的主项名称','')
-                    if (name !== null) {
-                        var treeOneNameArr = el.getElementsByClassName('tree-one-name')
-                        for (var i = 0; i < treeOneNameArr.length; i++) {
-                            // treeTwoArr
-                            if (treeOneNameArr[i].dataset.id === target.dataset.id) {
-                                treeOneNameArr[i].innerHTML = name
-                            }
+                    // 当前点击元素的所有兄弟元素
+                    var allChildren = target.parentNode.children
+                    var inputValue = ''
+                    for (var i = 0; i < allChildren.length; i++) {
+                        // 找到当前点击的元素的name
+                        if (allChildren[i].className === 'tree-one-name') {
+                            inputValue = allChildren[i].innerHTML
+                            nowClickDom = allChildren[i].className
+                            clickId = allChildren[i].dataset.key
                         }
-                        treeUtils.handleOptions(el)
                     }
+                    var EditDialog = treeUtils.initEditDialog('编辑主项', '输入主项名称', inputValue)
+                    EditDialog && document.body.insertAdjacentHTML('afterbegin', EditDialog)
+                    goobleEl = el
                 }
             }, true)
             document.addEventListener('change', function (event) {
@@ -146,23 +144,23 @@
         },
         // 添加一级树型图
         initTreeOne: function (name, value) {
-            name = name || prompt('请输入要创建的名字','')
+            // name = name || prompt('请输入要创建的名字','')
             value = value || ''
             if (name !== null) {
                 // 生成100000-999999的随机数
                 var timestamp = utils.getRandomNum(10000,999999)
-                var treeOne = '<div class="tree-one" data-id="'+ timestamp + '">' +
+                var treeOne = '<div class="tree-one" data-id="'+ timestamp + '" data-key="'+ timestamp + '">' +
                         '<div class="left">' +
                             '<div class="arrow" data-id="'+ timestamp + '"></div>' +
-                            '<div class="tree-one-name" data-id="'+ timestamp + '">' + name + '</div>' +
-                            '<div class="edit-icon" data-id="'+ timestamp + '"></div>' +
+                            '<div class="tree-one-name" data-id="'+ timestamp + '" data-key="'+ timestamp + '" title="'+ name + '">' + name + '</div>' +
+                            '<div class="edit-icon" data-id="'+ timestamp + '" data-key="'+ timestamp + '"></div>' +
                             '<div class="delete-icon" data-id="'+ timestamp + '"></div>' +
                         '</div>' +
                         '<div class="right">' +
                             '<input type="number" class="num-input" data-id="'+ timestamp + '" value="'+ value + '"><span>%</span>' +
                         '</div>' +
                     '</div>' +
-                    '<div class="sub-content" data-id="'+ timestamp + '"><div id="'+ timestamp + '" data-id="'+ timestamp + '" class="addProject-two">创建子项</div></div>'
+                    '<div class="sub-content" data-id="'+ timestamp + '"><div id="'+ timestamp + '" data-id="'+ timestamp + '" data-key="'+ timestamp + '" class="addProject-two">创建子项</div></div>'
                 return treeOne
             } else {
                 return false
@@ -172,12 +170,12 @@
         initTreeTwo: function (id, subName, value) {
             var subId = id
             var timestamp = utils.getRandomNum(10000,999999)
-            subName = subName || prompt('请输入要创建的子项名字','')
+            // subName = subName || prompt('请输入要创建的子项名字','')
             value = value || ''
             if (subName !== null) {
                 var treeTwo = '<div class="tree-two" data-id="'+ subId + '" data-key="'+ timestamp + '">' +
                     '<div class="left">' +
-                    '<div class="tree-two-name" data-id="'+ subId + '" data-key="'+ timestamp + '">' + subName + '</div>' +
+                    '<div class="tree-two-name" data-id="'+ subId + '" data-key="'+ timestamp + '" title="'+ subName + '">' + subName + '</div>' +
                     '<div class="sub-edit-icon" data-id="'+ subId + '" data-key="'+ timestamp + '"></div>' +
                     '<div class="sub-delete-icon" data-id="'+ subId + '" data-key="'+ timestamp + '"></div>' +
                     '</div>' +
@@ -189,6 +187,35 @@
             } else {
                 return false
             }
+        },
+        // 添加编辑弹窗
+        initEditDialog: function (dialogTitle, placeholder, inputValue) {
+            var editDialogDom = '<div id="edit-dialog-wrapper" class="dialog-wrapper">' +
+                '    <div class="dialog-content">' +
+                '        <div class="dialog-title">' + dialogTitle + '</div>' +
+                '        <div id="dialog-content-main">' +
+                '            <input id="dialog-content-main-input" type="text" placeholder="'+ placeholder + '" value="'+ inputValue + '">' +
+                '        </div>' +
+                '        <div class="dialog-footer">' +
+                '            <div id="dialog-cancel" class="dialog-btn">取消</div>' +
+                '            <div id="dialog-submit" class="dialog-btn">确定</div>' +
+                '        </div>' +
+                '    </div>' +
+                '</div>'
+            return editDialogDom
+        },
+        // 添加删除弹窗
+        initDelDialog: function () {
+            var delDialogDom = '<div id="edit-dialog-wrapper" class="dialog-wrapper">' +
+                '    <div class="dialog-content">' +
+                '        <div class="dialog-title">确定删除此项目？</div>' +
+                '        <div class="dialog-footer">' +
+                '            <div id="dialog-cancel" class="dialog-btn">取消</div>' +
+                '            <div id="dialog-submit-del" class="dialog-btn">确定</div>' +
+                '        </div>' +
+                '    </div>' +
+                '</div>'
+            return delDialogDom
         },
         handleOptions: function (el) {
             var optionsOneArr = []
@@ -298,7 +325,6 @@
             for (var j = 0; j < treeTwoName.length; j++) {
                 valueArr.push(treeTwoName[j].innerHTML)
             }
-            console.log(valueArr)
             var nary = valueArr.sort()
             for(var i = 0; i < nary.length - 1; i++) {
                 if(nary[i] === nary[i + 1]) {
@@ -330,5 +356,71 @@
             return treeUtils.checkHasRepeat(this.el)
         }
     }
+    document.addEventListener('click', function (event) {
+        var targetDom = event.target
+        if (targetDom.id === 'dialog-cancel') {
+            var editDialogDom = document.getElementById('edit-dialog-wrapper')
+            document.body.removeChild(editDialogDom)
+        }
+        if (targetDom.id === 'dialog-submit') {
+            var inputDom = document.getElementById('dialog-content-main-input')
+            if (inputDom.value === '') {
+                return false
+            }
+            if (typeof (nowClickDom) === 'string') {
+                var allNowClickDom = document.getElementsByClassName(nowClickDom)
+                for (var i = 0; i < allNowClickDom.length; i++) {
+                    // 找到对应的name标签，把innerHtml替换掉
+                    if (Number(clickId) === Number(allNowClickDom[i].dataset.key)) {
+                        if (allNowClickDom[i].className === 'addProject-two') {
+                            // 如果点击的是创建子项
+                            var treeTwo = treeUtils.initTreeTwo(clickId, inputDom.value, '')
+                            treeTwo && allNowClickDom[i].insertAdjacentHTML('beforebegin', treeTwo)
+                        } else {
+                            allNowClickDom[i].innerHTML = inputDom.value
+                        }
+                    }
+                }
+            }
+
+            // object 点击设置主项
+            if (typeof (nowClickDom) === 'object') {
+                var treeOne = treeUtils.initTreeOne(inputDom.value, '')
+                treeOne && nowClickDom.insertAdjacentHTML('beforebegin', treeOne)
+            }
+            clickId = ''
+            nowClickDom = ''
+            var editDialogDom = document.getElementById('edit-dialog-wrapper')
+            document.body.removeChild(editDialogDom)
+            treeUtils.handleOptions(goobleEl)
+        }
+    })
+
+    document.addEventListener('click', function (event) {
+        // dialog-submit-del
+        console.log(event.target.id)
+        if (event.target.id === 'dialog-submit-del') {
+            // 点击的是删除按钮
+            var treeOneArr = goobleEl.getElementsByClassName('tree-one')
+            var subContentArr = goobleEl.getElementsByClassName('sub-content')
+            for (var i = 0; i < treeOneArr.length; i++) {
+                // treeTwoArr
+                if (treeOneArr[i].dataset.id === clickId) {
+                    treeOneArr[i].remove()
+                }
+            }
+            for (var j = 0; j < subContentArr.length; j++) {
+                // treeTwoArr
+                if (subContentArr[j].dataset.id === clickId) {
+                    subContentArr[j].remove()
+                }
+            }
+            clickId = ''
+            nowClickDom = ''
+            treeUtils.handleOptions(goobleEl)
+            var editDialogDom = document.getElementById('edit-dialog-wrapper')
+            document.body.removeChild(editDialogDom)
+        }
+    })
     window.TreeTool = TreeTool
 })(window)
